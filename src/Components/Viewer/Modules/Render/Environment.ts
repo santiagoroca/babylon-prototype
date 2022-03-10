@@ -3,7 +3,6 @@ import PointLight from '../Render/PointLight';
 import Vector3 from '../Math/Vector3';
 import Scene from './Scene';
 
-
 class Environment {
 
     private mainLight: DirectionalLight;

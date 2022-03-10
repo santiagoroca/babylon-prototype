@@ -1,8 +1,8 @@
-import * as UUID from 'uuid';
 import ContainerController from './ContainerController';
 import Resource from './Resource';
 import Container from './Container';
 import ResourcesGrid from './ResourcesGrid';
+import GridGround from './GridGround';
 import Scene from '../Render/Scene';
 import Camera from '../Render/Camera';
 import Engine from '../Render/Engine';
@@ -12,6 +12,7 @@ class ResourcesGroup {
     private container : Container;
     private resourcesGrid: ResourcesGrid;
     private containerController: ContainerController;
+    private gridGround: GridGround;
 
     private width : number = 0;
     private height: number = 0;
@@ -20,6 +21,7 @@ class ResourcesGroup {
         this.container = new Container();
         this.resourcesGrid = new ResourcesGrid();
         this.containerController = new ContainerController(scene);
+        this.gridGround = new GridGround(scene);
 
         for (let i = 0; i < 50; i++) {
             this.resourcesGrid.push(new Resource(scene, i.toString()));

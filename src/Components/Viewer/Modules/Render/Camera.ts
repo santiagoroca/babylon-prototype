@@ -8,6 +8,8 @@ class LocalCamera extends ArcRotateCamera {
         super("Camera", 0, 0, 10, new Vector3(0, 0, -10), scene);
         this.setTarget(Vector3.Zero());
         this.attachControl(canvas, true);
+        this.upperBetaLimit = Math.PI / 2;
+        this.lowerBetaLimit = Math.PI / 4;
     }
 
 }

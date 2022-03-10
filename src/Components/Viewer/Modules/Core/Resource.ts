@@ -13,7 +13,7 @@ import StandardMaterial from '../Render/Material/StandardMaterial';
 
 
 class Resource {
-    static size: number = 0.5;
+    static size: number = 0.8;
 
     private mesh: Mesh;
     private label : HTMLDivElement;

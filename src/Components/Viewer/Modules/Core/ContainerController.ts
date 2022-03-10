@@ -8,6 +8,7 @@ import ExecuteCodeAction from '../Event/ExecuteCodeAction';
 import StandardMaterial from '../Render/Material/StandardMaterial';
 import Texture from '../Render/Texture';
 import Scene from '../Render/Scene';
+import GridGround from './GridGround';
 
 class ContainerController {
 
@@ -48,9 +49,27 @@ class ContainerController {
             dragPlaneNormal: new Vector3(0, 0, 1)
         });
 
+        /**
+         * Note to the interviewer:
+         * 
+         * This will result in a buggy experience. Rather
+         * we should clamp x and z values to 0 if they 
+         * go below it. 
+         * 
+         * For simplicity, this should do it.
+         */
+        pointerDragBehavior.validateDrag = (position: Vector3): boolean => {
+            if (position.x < 0 || position.z < 0) {
+                return false;
+            }
+            
+            return true;
+        }
+
         pointerDragBehavior.attach(this.mesh);
         pointerDragBehavior.onDragStartObservable.add(this.onControllerStart.bind(this));
         pointerDragBehavior.onDragEndObservable.add(this.onControllerEnd.bind(this));
+        pointerDragBehavior.onDragObservable.add(this.onControllerDrag.bind(this));
     }
 
     onControllerStart () {
@@ -61,6 +80,22 @@ class ContainerController {
     onControllerEnd () {
         this.dragging = false;
         this.mesh.scaling.set(1, 1, 1);
+
+        console.log(2 * Math.floor(this.mesh.position.x / GridGround.frequency));
+
+        this.mesh.position.set(
+            Math.round(this.mesh.position.x / GridGround.frequency),
+            0,
+            Math.round(this.mesh.position.z / GridGround.frequency),
+        );
+    }
+
+    onControllerDrag () {
+        this.mesh.position.set(
+            Math.max(this.mesh.position.x, 0),
+            Math.max(this.mesh.position.y, 0),
+            Math.max(this.mesh.position.z, 0),
+        )
     }
 
     get position (): Vector3 {
