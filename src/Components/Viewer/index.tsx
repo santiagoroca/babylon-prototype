@@ -22,11 +22,11 @@ export default () => {
       return;
     }
 
-    const engine = new Engine(canvas, true);
+    const engine = new Engine(canvas);
     const scene = new Scene(engine);
     const camera = new Camera(canvas, scene);
     const environment = new Environment(scene);
-    const resourceGroup = new ResourcesGroup();
+    const resourceGroup = new ResourcesGroup(scene);
 
     const resize = () => {
       scene.getEngine().resize();

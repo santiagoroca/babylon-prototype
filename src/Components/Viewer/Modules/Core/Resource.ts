@@ -5,7 +5,12 @@ import Vector3 from '../Math/Vector3';
 import Scene from '../Render/Scene';
 import Camera from '../Render/Camera';
 import Engine from '../Render/Engine';
-import { ActionManager } from '@babylonjs/core';
+import ActionManager from '../Event/ActionManager';
+import ExecuteCodeAction from '../Event/ExecuteCodeAction';
+import Color3 from '../Render/Color3';
+import Color4 from '../Render/Color4';
+import StandardMaterial from '../Render/Material/StandardMaterial';
+
 
 class Resource {
     static size: number = 0.5;
@@ -13,8 +18,32 @@ class Resource {
     private mesh: Mesh;
     private label : HTMLDivElement;
 
-    constructor (label: string) {
+    constructor (scene: Scene, label: string) {
         this.mesh = Box({ size: Resource.size });
+        this.mesh.enableEdgesRendering(); 
+        this.mesh.edgesWidth = 2.0;
+        this.mesh.edgesColor = new Color4(1, 0, 1, 1);
+        this.mesh.material = new StandardMaterial("", scene);
+        (this.mesh.material as StandardMaterial).emissiveColor = Color3.Blue();
+        this.mesh.actionManager = new ActionManager(scene);
+        	
+        //ON MOUSE ENTER
+        this.mesh.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOverTrigger, () =>{	
+            if (this.mesh && this.mesh.material) {
+                this.label.style.visibility = 'visible'; 
+                (this.mesh.material as StandardMaterial).emissiveColor = Color3.Red();
+                this.mesh.scaling.set(1.1, 1.1, 1.1);
+            }
+        }));
+        
+        //ON MOUSE EXIT
+        this.mesh.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOutTrigger, () =>{
+            if (this.mesh && this.mesh.material) {
+                this.label.style.visibility = 'hidden'; 
+                (this.mesh.material as StandardMaterial).emissiveColor = Color3.Blue();
+                this.mesh.scaling.set(1, 1, 1);
+            }
+        }));
 
         /**
          * Note to the interviewer:
@@ -36,6 +65,7 @@ class Resource {
         this.label.style.padding = '5px';
         this.label.style.borderRadius = '2px';
         this.label.style.pointerEvents = 'none';
+        this.label.style.visibility = 'hidden';
         document.body.appendChild(this.label)
 
         this.visible = false;
@@ -59,7 +89,6 @@ class Resource {
 
     set visible (visible: boolean) {
         this.mesh.setEnabled(visible);
-        this.label.style.visibility = visible ? 'visible' : 'hidden'; 
     }
 
 }

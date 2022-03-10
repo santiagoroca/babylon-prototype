@@ -1,6 +1,5 @@
 import * as UUID from 'uuid';
-import ContainerController from '../Geometry/ContainerController';
-import Mesh from '../Render/Mesh';
+import ContainerController from './ContainerController';
 import Resource from './Resource';
 import Container from './Container';
 import ResourcesGrid from './ResourcesGrid';
@@ -12,47 +11,25 @@ class ResourcesGroup {
 
     private container : Container;
     private resourcesGrid: ResourcesGrid;
-    private controllerMesh: Mesh;
+    private containerController: ContainerController;
 
     private width : number = 0;
     private height: number = 0;
-    private dragging: boolean = false;
 
-    constructor () {
+    constructor (scene: Scene) {
         this.container = new Container();
         this.resourcesGrid = new ResourcesGrid();
-
-        this.controllerMesh = ContainerController(
-            {
-                diameter: 0.5,
-                segments: 16
-            }, 
-            this.onControllerStart.bind(this),
-            this.onControllerEnd.bind(this),
-        );
+        this.containerController = new ContainerController(scene);
 
         for (let i = 0; i < 50; i++) {
-            this.resourcesGrid.push(new Resource(i.toString()));
+            this.resourcesGrid.push(new Resource(scene, i.toString()));
         }
-    }
-
-    onControllerStart () {
-        this.dragging = true;
-    }
-
-    onControllerEnd () {
-        this.dragging = false;
     }
 
     update (scene: Scene, camera: Camera, engine: Engine) {
-        const width = Math.max(0, this.controllerMesh.position.x) * 2;
-        const height = Math.max(0, this.controllerMesh.position.z) * 2;
-
+        const width = Math.max(0, this.containerController.position.x) * 2;
+        const height = Math.max(0, this.containerController.position.z) * 2;
         this.resourcesGrid.update(scene, camera, engine, width, height);
-
-        if (!this.dragging) {
-            return;
-        }
 
         if (width === this.width && height === this.height) {
             return;

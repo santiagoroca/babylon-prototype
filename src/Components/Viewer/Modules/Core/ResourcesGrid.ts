@@ -5,12 +5,15 @@ import Engine from '../Render/Engine';
 
 class ResourcesGrid extends Array<Resource> {
     static gap = 0.1;
+    static padding = 0.5;
 
     update (scene: Scene, camera: Camera, engine: Engine, width: number, height: number) {
-        const halfWidth = width / 2;
-        const halfHeight = height / 2;
-        const rowCount = Math.trunc(width / (Resource.size + ResourcesGrid.gap));
-        const rowWidth = width / rowCount;
+        const realWidth = width - ResourcesGrid.padding;
+        const realHeight = height - ResourcesGrid.padding;
+        const halfWidth = realWidth / 2;
+        const halfHeight = realHeight / 2;
+        const rowCount = Math.trunc(realWidth / (Resource.size + ResourcesGrid.gap));
+        const rowWidth = realWidth / rowCount;
 
         let xPosition = ResourcesGrid.gap + Resource.size / 2;
         let yPosition = ResourcesGrid.gap + Resource.size / 2;
@@ -19,16 +22,16 @@ class ResourcesGrid extends Array<Resource> {
             resource.visible = false;
         }
 
-        if (Resource.size + ResourcesGrid.gap > width) {
+        if (Resource.size + ResourcesGrid.gap > realWidth) {
             return;
         }
 
         for (const resource of this) {
-            if (xPosition >= width) {
+            if (xPosition >= realWidth) {
                 xPosition = ResourcesGrid.gap + Resource.size / 2;
                 yPosition += Resource.size + ResourcesGrid.gap;
 
-                if (yPosition >= height) {
+                if (yPosition >= realHeight) {
                     break;
                 }
             }
