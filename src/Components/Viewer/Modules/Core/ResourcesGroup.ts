@@ -32,7 +32,7 @@ class ResourcesGroup {
         );
 
         for (let i = 0; i < 10; i++) {
-            this.resourcesGrid.push(new Resource(UUID.v4()));
+            this.resourcesGrid.push(new Resource(i.toString()));
         }
     }
 
