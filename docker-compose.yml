@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+
+  dashboard:
+    build:
+      context: .
+    volumes:
+      - ./dashboard/src:/home/node/app/src
+    ports:
+      - "3001:3000"
