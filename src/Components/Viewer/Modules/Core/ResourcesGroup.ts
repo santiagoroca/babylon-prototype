@@ -31,7 +31,7 @@ class ResourcesGroup {
             this.onControllerEnd.bind(this),
         );
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 50; i++) {
             this.resourcesGrid.push(new Resource(i.toString()));
         }
     }
